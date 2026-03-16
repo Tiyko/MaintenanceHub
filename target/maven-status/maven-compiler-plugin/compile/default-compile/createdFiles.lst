@@ -1,0 +1,14 @@
+mainhub\MaintenanceHub\Repairable.class
+mainhub\MaintenanceHub\ServiceType.class
+mainhub\MaintenanceHub\SoftwareService.class
+mainhub\MaintenanceHub\Tablet.class
+mainhub\MaintenanceHub\Laptop.class
+mainhub\MaintenanceHub\MainHub.class
+mainhub\MaintenanceHub\SmartWatch.class
+mainhub\MaintenanceHub\Device.class
+mainhub\MaintenanceHub\Recoverable.class
+mainhub\MaintenanceHub\Desktop.class
+mainhub\MaintenanceHub\OtherDevice.class
+mainhub\MaintenanceHub\JobStatus.class
+mainhub\MaintenanceHub\RepairJob.class
+mainhub\MaintenanceHub\Phone.class
