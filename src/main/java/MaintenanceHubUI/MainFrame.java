@@ -36,6 +36,8 @@ public class MainFrame extends javax.swing.JFrame {
         jButtonExit.addActionListener(e -> {
             System.exit(0);
         });
+        // App Load at Create Job Panel
+        showPanel(new MaintenanceHubUI.CreateJobPanel());
     }
     
     private void showPanel(javax.swing.JPanel panel) {
