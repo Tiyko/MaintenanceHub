@@ -1,4 +1,5 @@
 MaintenanceHubUI\UpdateJobPanel.class
+MaintenanceHubUI\JobListPanel$1.class
 mainhub\MaintenanceHub\Repairable.class
 mainhub\MaintenanceHub\RepairJob$1.class
 mainhub\MaintenanceHub\ServiceType.class

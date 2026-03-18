@@ -6,7 +6,11 @@ package MaintenanceHubUI;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Clipboard;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import MaintenanceHubdata.JobList;
 import MaintenanceHubdata.UndoStack;
 import mainhub.MaintenanceHub.RepairJob;
@@ -29,6 +33,22 @@ public class JobListPanel extends javax.swing.JPanel {
 
         initComponents();
         loadTableData();
+        
+        jTableJobs.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = jTableJobs.getSelectedRow();
+                int col = jTableJobs.getSelectedColumn();
+
+                // Only copy if the user clicked the Job ID column (column 0)
+                if (row != -1 && col == 0) {
+                    String jobID = jTableJobs.getValueAt(row, 0).toString();
+                    copyToClipboard(jobID);
+                    JOptionPane.showMessageDialog(null, "Job ID copied: " + jobID);
+                }
+            }
+        });
+
 
         // Button actions
         jButtonRefresh.addActionListener(e -> loadTableData());
@@ -92,6 +112,12 @@ public class JobListPanel extends javax.swing.JPanel {
         loadTableData();
 
         JOptionPane.showMessageDialog(this, "Restored job: " + restored.getJobID());
+    }
+
+    private void copyToClipboard(String text) {
+        StringSelection selection = new StringSelection(text);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, null);
     }
 
 
