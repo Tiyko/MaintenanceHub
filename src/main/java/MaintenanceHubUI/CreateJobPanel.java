@@ -79,9 +79,11 @@ public class CreateJobPanel extends javax.swing.JPanel {
             }
 
             RepairJob job = new RepairJob(UUID.randomUUID().toString(), device, service, status);
+
             jobList.addJob(job);
 
-            undoStack.pushAction("Created job: " + job.getJobID());
+            // NEW: store job for undo
+            undoStack.pushCreatedJob(job);
 
             JOptionPane.showMessageDialog(this, "Job created successfully!");
 
@@ -91,6 +93,19 @@ public class CreateJobPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Error creating job: " + ex.getMessage());
         }
     }
+
+    private void undoCreate() {
+        RepairJob job = undoStack.undoCreate();
+
+        if (job == null) {
+            JOptionPane.showMessageDialog(this, "Nothing to undo.");
+            return;
+        }
+
+        jobList.removeJob(job);
+        JOptionPane.showMessageDialog(this, "Undo successful. Removed job: " + job.getJobID());
+    }
+
 
     private void clearForm() {
         jTextOwnerName.setText("");

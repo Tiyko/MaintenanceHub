@@ -73,14 +73,17 @@ public class UpdateJobPanel extends javax.swing.JPanel {
         JobStatus newStatus = (JobStatus) jComboNewStatus.getSelectedItem();
         JobStatus oldStatus = currentJob.getStatus();
 
+        // Save for undo
+        undoStack.pushUpdatedJob(currentJob, oldStatus);
+
+        // Apply update
         currentJob.updateStatus(newStatus);
-        undoStack.pushAction("Updated job " + currentJob.getJobID() +
-                " from " + oldStatus + " to " + newStatus);
 
         JOptionPane.showMessageDialog(this, "Job updated successfully!");
 
         jTextCurrentStatus.setText(newStatus.toString());
     }
+
 
     private void clearFields() {
         jTextSearchID.setText("");
@@ -94,15 +97,24 @@ public class UpdateJobPanel extends javax.swing.JPanel {
     }
 
     private void undoAction() {
-        String action = undoStack.undo();
+        RepairJob job = undoStack.undoUpdate();
+        JobStatus oldStatus = undoStack.undoOldStatus();
 
-        if (action == null) {
+        if (job == null || oldStatus == null) {
             JOptionPane.showMessageDialog(this, "Nothing to undo.");
             return;
         }
 
-        JOptionPane.showMessageDialog(this, "Undo: " + action);
+        job.updateStatus(oldStatus);
+
+        // If the undone job is currently displayed, update the UI
+        if (currentJob != null && currentJob.getJobID().equals(job.getJobID())) {
+            jTextCurrentStatus.setText(oldStatus.toString());
+        }
+
+        JOptionPane.showMessageDialog(this, "Undo successful. Restored previous status.");
     }
+
 
     private void initComponents() {
 

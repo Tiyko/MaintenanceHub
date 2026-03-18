@@ -63,29 +63,37 @@ public class JobListPanel extends javax.swing.JPanel {
         }
 
         String jobID = jTableJobs.getValueAt(row, 0).toString();
+        RepairJob jobToDelete = null;
 
         for (RepairJob job : jobList.getAllJobs()) {
             if (job.getJobID().equals(jobID)) {
-                jobList.removeJob(job);
-                undoStack.pushAction("Deleted job: " + jobID);
+                jobToDelete = job;
                 break;
             }
         }
 
-        loadTableData();
+        if (jobToDelete != null) {
+            undoStack.pushDeletedJob(jobToDelete);   // ← store job for undo
+            jobList.removeJob(jobToDelete);
+            loadTableData();
+        }
     }
 
-    // Undo last action
-    private void undoLastAction() {
-        String action = undoStack.undo();
 
-        if (action == null) {
+    private void undoLastAction() {
+        RepairJob restored = undoStack.undoDelete();
+
+        if (restored == null) {
             JOptionPane.showMessageDialog(this, "Nothing to undo.");
             return;
         }
 
-        JOptionPane.showMessageDialog(this, "Undo: " + action);
+        jobList.addJob(restored);
+        loadTableData();
+
+        JOptionPane.showMessageDialog(this, "Restored job: " + restored.getJobID());
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
