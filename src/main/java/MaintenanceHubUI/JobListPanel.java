@@ -4,6 +4,11 @@
  */
 package MaintenanceHubUI;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import MaintenanceHubdata.JobList;
+import MaintenanceHubdata.UndoStack;
+import mainhub.MaintenanceHub.RepairJob;
 /**
  *
  * @author Tiyko
@@ -13,8 +18,72 @@ public class JobListPanel extends javax.swing.JPanel {
     /**
      * Creates new form JobListPanel
      */
-    public JobListPanel() {
+    
+     private JobList jobList;
+    private UndoStack undoStack;
+
+    public JobListPanel(JobList jobList, UndoStack undoStack) {
+        this.jobList = jobList;
+        this.undoStack = undoStack;
+
         initComponents();
+        loadTableData();
+
+        // Button actions
+        jButtonRefresh.addActionListener(e -> loadTableData());
+        jButtonDelete.addActionListener(e -> deleteSelectedJob());
+        jButtonUndo.addActionListener(e -> undoLastAction());
+    }
+
+    // Load all jobs into the table
+    private void loadTableData() {
+        DefaultTableModel model = (DefaultTableModel) jTableJobs.getModel();
+        model.setRowCount(0);
+
+        for (RepairJob job : jobList.getAllJobs()) {
+            model.addRow(new Object[]{
+                    job.getJobID(),
+                    job.getDevice().getType(),
+                    job.getDevice().getOwnerName(),
+                    job.getType(),
+                    job.getStatus(),
+                    job.getCost()
+            });
+        }
+    }
+
+    // Delete selected job
+    private void deleteSelectedJob() {
+        int row = jTableJobs.getSelectedRow();
+
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a job to delete.");
+            return;
+        }
+
+        String jobID = jTableJobs.getValueAt(row, 0).toString();
+
+        for (RepairJob job : jobList.getAllJobs()) {
+            if (job.getJobID().equals(jobID)) {
+                jobList.removeJob(job);
+                undoStack.pushAction("Deleted job: " + jobID);
+                break;
+            }
+        }
+
+        loadTableData();
+    }
+
+    // Undo last action
+    private void undoLastAction() {
+        String action = undoStack.undo();
+
+        if (action == null) {
+            JOptionPane.showMessageDialog(this, "Nothing to undo.");
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this, "Undo: " + action);
     }
 
     /**
@@ -26,19 +95,106 @@ public class JobListPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableJobs = new javax.swing.JTable();
+        jPanelBottom = new javax.swing.JPanel();
+        jButtonRefresh = new javax.swing.JButton();
+        jButtonUndo = new javax.swing.JButton();
+        jButtonDelete = new javax.swing.JButton();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
+
+        jTableJobs.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Job ID", "Device Type", "Owner", "Service Type", "Status", "Cost"
+            }
+        ));
+        jScrollPane3.setViewportView(jTableJobs);
+
+        jScrollPane1.setViewportView(jScrollPane3);
+
+        jButtonRefresh.setText("Refresh");
+
+        jButtonUndo.setText("Undo");
+
+        jButtonDelete.setText("Delete");
+
+        javax.swing.GroupLayout jPanelBottomLayout = new javax.swing.GroupLayout(jPanelBottom);
+        jPanelBottom.setLayout(jPanelBottomLayout);
+        jPanelBottomLayout.setHorizontalGroup(
+            jPanelBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelBottomLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(jButtonRefresh)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addComponent(jButtonDelete)
+                .addGap(40, 40, 40)
+                .addComponent(jButtonUndo)
+                .addGap(33, 33, 33))
+        );
+        jPanelBottomLayout.setVerticalGroup(
+            jPanelBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelBottomLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonRefresh)
+                    .addComponent(jButtonUndo)
+                    .addComponent(jButtonDelete)))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(132, 132, 132)
+                .addComponent(jPanelBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(145, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonDelete;
+    private javax.swing.JButton jButtonRefresh;
+    private javax.swing.JButton jButtonUndo;
+    private javax.swing.JPanel jPanelBottom;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableJobs;
     // End of variables declaration//GEN-END:variables
 }

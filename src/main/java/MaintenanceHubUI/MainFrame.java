@@ -4,50 +4,53 @@
  */
 package MaintenanceHubUI;
 
+import MaintenanceHubdata.JobList;
+import MaintenanceHubdata.UndoStack;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Tiyko
  */
-public class MainFrame extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
+public class Mainframe extends javax.swing.JFrame {
+
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Mainframe.class.getName());
 
     /**
-     * Creates new form MainFrame
+     * Creates new form Mainframe
      */
+   // Shared data structures
+    private JobList jobList = new JobList();
+    private UndoStack undoStack = new UndoStack();
+
     public MainFrame() {
         initComponents();
-        // Load Create Job Panel
-        jButtonCreateJob.addActionListener(e -> {
-            showPanel(new MaintenanceHubUI.CreateJobPanel());
-        });
+        setLocationRelativeTo(null); // center window
 
-        // Load Job List Panel
-        jButtonViewJobs.addActionListener(e -> {
-            showPanel(new MaintenanceHubUI.JobListPanel());
-        });
+        // Load default panel
+        showPanel(new CreateJobPanel(jobList, undoStack));
 
-        // Load Update Job Panel
-        jButtonUpdateJob.addActionListener(e -> {
-            showPanel(new MaintenanceHubUI.UpdateJobPanel());
-        });
+        // Navigation buttons
+        jButtonCreateJob.addActionListener(e ->
+                showPanel(new CreateJobPanel(jobList, undoStack)));
 
-        // Exit application
-        jButtonExit.addActionListener(e -> {
-            System.exit(0);
-        });
-        // App Load at Create Job Panel
-        showPanel(new MaintenanceHubUI.CreateJobPanel());
+        jButtonViewJobs.addActionListener(e ->
+                showPanel(new JobListPanel(jobList, undoStack)));
+
+        jButtonUpdateJob.addActionListener(e ->
+                showPanel(new UpdateJobPanel(jobList, undoStack)));
+
+        jButtonExit.addActionListener(e -> System.exit(0));
     }
-    
-    private void showPanel(javax.swing.JPanel panel) {
+
+    // Method to switch panels
+    private void showPanel(JPanel panel) {
         jPanelContent.removeAll();
         jPanelContent.add(panel);
         jPanelContent.revalidate();
         jPanelContent.repaint();
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -57,43 +60,35 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFrame1 = new javax.swing.JFrame();
-        jLabelTitle = new javax.swing.JLabel();
         jPanelJobs = new javax.swing.JPanel();
-        jButtonCreateJob = new javax.swing.JButton();
         jButtonViewJobs = new javax.swing.JButton();
+        jButtonCreateJob = new javax.swing.JButton();
         jButtonUpdateJob = new javax.swing.JButton();
         jButtonExit = new javax.swing.JButton();
         jPanelContent = new javax.swing.JPanel();
-
-        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
-        jFrame1.getContentPane().setLayout(jFrame1Layout);
-        jFrame1Layout.setHorizontalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jFrame1Layout.setVerticalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jLabelTitle = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabelTitle.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabelTitle.setText("Maintenance HUB");
-
-        jPanelJobs.setLayout(new javax.swing.BoxLayout(jPanelJobs, javax.swing.BoxLayout.Y_AXIS));
-
-        jButtonCreateJob.setText("Create Job");
-        jButtonCreateJob.addActionListener(this::jButtonCreateJobActionPerformed);
+        jPanelJobs.setAutoscrolls(true);
+        jPanelJobs.setLayout(new javax.swing.BoxLayout(jPanelJobs, javax.swing.BoxLayout.LINE_AXIS));
 
         jButtonViewJobs.setText("View Jobs");
+        jPanelJobs.add(jButtonViewJobs);
+
+        jButtonCreateJob.setText("Create Job");
+        jPanelJobs.add(jButtonCreateJob);
 
         jButtonUpdateJob.setText("Update Job");
+        jPanelJobs.add(jButtonUpdateJob);
 
         jButtonExit.setText("Exit");
+        jPanelJobs.add(jButtonExit);
 
         jPanelContent.setLayout(new java.awt.CardLayout());
+
+        jLabelTitle.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jLabelTitle.setText("Maintenance System");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,53 +97,29 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(104, 104, 104)
+                        .addGap(122, 122, 122)
                         .addComponent(jLabelTitle))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButtonUpdateJob, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonViewJobs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonCreateJob, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanelJobs, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addComponent(jPanelContent, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(101, Short.MAX_VALUE))
+                            .addComponent(jPanelJobs, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanelContent, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(13, 13, 13)
                 .addComponent(jLabelTitle)
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelJobs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonCreateJob)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonViewJobs)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonUpdateJob)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonExit))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jPanelContent, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 73, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanelJobs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanelContent, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
-
-        jPanelContent.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButtonCreateJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateJobActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonCreateJobActionPerformed
 
     /**
      * @param args the command line arguments
@@ -172,7 +143,7 @@ public class MainFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MainFrame().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Mainframe().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -180,7 +151,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButtonExit;
     private javax.swing.JButton jButtonUpdateJob;
     private javax.swing.JButton jButtonViewJobs;
-    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabelTitle;
     private javax.swing.JPanel jPanelContent;
     private javax.swing.JPanel jPanelJobs;
