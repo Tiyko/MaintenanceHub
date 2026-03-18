@@ -4,6 +4,8 @@
 
 package mainhub.MaintenanceHub;
 
+import MaintenanceHubUI.Mainframe;
+
 /**
  *
  * @author Tiyko
@@ -11,6 +13,9 @@ package mainhub.MaintenanceHub;
 public class MainHub {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        // Launch the UI
+        java.awt.EventQueue.invokeLater(() -> {
+            new Mainframe().setVisible(true);
+        });
     }
 }
