@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package mainhub.MaintenanceHub;
+import mainhub.MaintenanceHub.ServiceType;
+import mainhub.MaintenanceHub.JobStatus;
 
 /**
  *
@@ -42,7 +44,19 @@ public class RepairJob {
         this.status = newStatus;
     }
 
-    public double getCost() {
-        return device.calcCost();
+        public double getCost() {
+            double base = switch (type) {
+                case DIAGNOSTIC -> 30;
+                case REPAIR -> 100;
+                case MAINTENANCE -> 60;
+                case DATA_RECOVERY -> 150;
+                case SOFTWARE_SERVICE -> 50;
+            };
+
+            // Example: laptops cost more
+            if (device instanceof Laptop) base += 20;
+
+            return base;
     }
+
 }

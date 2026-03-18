@@ -1,5 +1,6 @@
 MaintenanceHubUI\UpdateJobPanel.class
 mainhub\MaintenanceHub\Repairable.class
+mainhub\MaintenanceHub\RepairJob$1.class
 mainhub\MaintenanceHub\ServiceType.class
 MaintenanceHubUI\Mainframe.class
 mainhub\MaintenanceHub\SoftwareService.class
